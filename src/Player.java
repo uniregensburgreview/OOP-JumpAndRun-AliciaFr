@@ -9,13 +9,11 @@ import de.ur.mi.sound.Sound;
 public class Player {
 
     /* private constants for the jump */
-    private static final double MAX_TURN_POINT = Configuration.CANVAS_HEIGHT/2;
-    private static final double X_SPEED = 0;
-    private static final double Y_SPEED = -3;
-    private static final Sound JUMP_SOUND = new Sound("/data/assets/jump.wav");
+    private static final double _maxTurnPoint = Configuration.CANVAS_HEIGHT/2;
+    private static final double xSPEED = 0;
+    private static final double ySPEED = -3;
 
     /* setup for player */
-    private static final Color PLAYER_COLOR = Color.BLACK;
     private static final int PLAYER_WIDTH = Configuration.CANVAS_WIDTH / 50;
     private static final int PLAYER_HEIGHT = Configuration.GROUND_HEIGHT / 3;
 
@@ -29,19 +27,19 @@ public class Player {
     private double jumpY;
 
     public Player() {
-        double xPos = (Configuration.CANVAS_WIDTH / 8);
+        double xPos = Configuration.CANVAS_WIDTH / 8;
         double yPos = Configuration.GROUND_Y_POS - PLAYER_HEIGHT;
         int width = PLAYER_WIDTH;
         int height = PLAYER_HEIGHT;
-        Color color = PLAYER_COLOR;
-        player = new Rect(xPos, yPos, width, height, color);
-        dx = X_SPEED;
-        dy = Y_SPEED;
+        Color color = Color.BLACK;
+        player = new Rect(xPos, yPos, PLAYER_WIDTH, PLAYER_HEIGHT, color);
+        dx = xSPEED;
+        dy = ySPEED;
     }
 
     /* Called to update, move the yPosition of the player */
     public void update() {
-        if(jumped) {
+        if(jumped == false) {
             player.move(dx,dy);
             checkForMaxHeight();
             checkForGround();
@@ -52,7 +50,7 @@ public class Player {
     /* When the maximal height of the jump is reached, the y-direction is going to be reversed:
     the player falls back */
     private void checkForMaxHeight() {
-        if(player.getY() <= MAX_TURN_POINT) {
+        if(player.getY() <= _maxTurnPoint) {
             dy = -dy;
         }
     }
@@ -74,18 +72,20 @@ public class Player {
     /* controls if player jumps upwards */
     public void jump() {
         if (!jumped) {
-            JUMP_SOUND.play();
+            private Sound jumpSound = new Sound("/data/assets/jump.wav");
+            jumpSound.play();
             jumpY = player.getBottomBorder();
-            jumpY--;
+            jumpY = jumpY - 1;
             jumped = true;
         }
+        return jumped;
     }
 
     /* Called when player is falling into a pit to make it look like the player falls off the Canvas */
     public void fallsInPit() {
         double currentXPos = player.getX();
         double currentYPos = player.getY();
-        currentYPos += 10;
+        currentYPos =  currentYPos + 10;
         player.setPosition(currentXPos, currentYPos);
         player.draw();
     }
@@ -95,8 +95,8 @@ public class Player {
     public Rect getPlayerBounds() {
         double xPos = player.getX();
         double yPos = player.getY();
-        int width = (int) player.getWidth();
-        int height  = (int) player.getHeight();
+        int width = player.getWidth();
+        int height  = player.getHeight();
         Color color = player.getColor();
         Rect playerBounds = new Rect(xPos, yPos, width, height, color);
         return playerBounds;
