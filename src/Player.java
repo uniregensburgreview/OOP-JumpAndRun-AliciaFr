@@ -10,12 +10,12 @@ public class Player {
 
     /* private constants for the jump */
     private static final double _maxTurnPoint = Configuration.CANVAS_HEIGHT/2;
-    private static final double xSPEED = 0;
-    private static final double ySPEED = -3;
+    private static final double x_speed = 0;
+    private static final double y_speed = -3;
 
     /* setup for player */
-    private static final int PLAYER_WIDTH = Configuration.CANVAS_WIDTH / 50;
-    private static final int PLAYER_HEIGHT = Configuration.GROUND_HEIGHT / 3;
+    private static final int player_width = Configuration.CANVAS_WIDTH / 50;
+    private static final int player_heigt = Configuration.GROUND_HEIGHT / 3;
 
     /* instance variables for player */
     private Rect player; // Represents the player
@@ -29,30 +29,26 @@ public class Player {
     public Player() {
         double xPos = Configuration.CANVAS_WIDTH / 8;
         double yPos = Configuration.GROUND_Y_POS - PLAYER_HEIGHT;
-        int width = PLAYER_WIDTH;
-        int height = PLAYER_HEIGHT;
+        int width = player_width;
+        int height = player_height;
         Color color = Color.BLACK;
         player = new Rect(xPos, yPos, PLAYER_WIDTH, PLAYER_HEIGHT, color);
-        dx = xSPEED;
-        dy = ySPEED;
+        dx = x_speed;
+        dy = y_speed;
     }
 
-    /* Called to update, move the yPosition of the player */
+    /* Called to update, move the yPosition of the player 
+    When the maximal height of the jump is reached, the y-direction is going to be reversed:
+    the player falls back */
     public void update() {
         if(jumped == false) {
             player.move(dx,dy);
-            checkForMaxHeight();
+            if(player.getY() <= _maxTurnPoint) {
+                dy = -dy;
+            } else {
+            }
             checkForGround();
-        }
-        getPlayerBounds().setPosition(player.getX(), player.getY());
-    }
-
-    /* When the maximal height of the jump is reached, the y-direction is going to be reversed:
-    the player falls back */
-    private void checkForMaxHeight() {
-        if(player.getY() <= _maxTurnPoint) {
-            dy = -dy;
-        }
+            getPlayerBounds().setPosition(player.getX(), player.getY());
     }
 
     /* When the bottom of the player reaches the ground again, it stops falling down */
@@ -71,8 +67,9 @@ public class Player {
 
     /* controls if player jumps upwards */
     public void jump() {
+        boolean jumped;
         if (!jumped) {
-            private Sound jumpSound = new Sound("/data/assets/jump.wav");
+            Sound jumpSound = new Sound("/data/assets/jump.wav");
             jumpSound.play();
             jumpY = player.getBottomBorder();
             jumpY = jumpY - 1;
@@ -93,12 +90,7 @@ public class Player {
 
     /* Creates a rect that represents the current movement of the player */
     public Rect getPlayerBounds() {
-        double xPos = player.getX();
-        double yPos = player.getY();
-        int width = player.getWidth();
-        int height  = player.getHeight();
-        Color color = player.getColor();
-        Rect playerBounds = new Rect(xPos, yPos, width, height, color);
+        Rect playerBounds = new Rect(player.getX(), player.getY(), player.getHeight(), player.getColor());
         return playerBounds;
     }
 }
