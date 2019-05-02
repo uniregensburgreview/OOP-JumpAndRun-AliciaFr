@@ -28,11 +28,11 @@ public class Player {
 
     public Player() {
         double xPos = Configuration.CANVAS_WIDTH / 8;
-        double yPos = Configuration.GROUND_Y_POS - PLAYER_HEIGHT;
+        double yPos = Configuration.GROUND_Y_POS - player_height;
         int width = player_width;
         int height = player_height;
         Color color = Color.BLACK;
-        player = new Rect(xPos, yPos, PLAYER_WIDTH, PLAYER_HEIGHT, color);
+        player = new Rect(xPos, yPos, player_width, player_height, color);
         dx = x_speed;
         dy = y_speed;
     }
